@@ -14,6 +14,7 @@
     <header class="hero">
       <nav class="topbar" aria-label="Page">
         <a href="#playbook">Playbook</a>
+        <a href="#enforcement">Hooks</a>
         <a href="#prompts">Prompts</a>
         <a href="#calculator">Calculator</a>
       </nav>
@@ -151,6 +152,49 @@
         </div>
       </section>
 
+      <section class="section split" id="enforcement">
+        <div class="section-heading">
+          <p class="eyebrow">Make it stick</p>
+          <h2>Use Hooks for Rules Codex Must Not Forget</h2>
+          <p>
+            Markdown instructions are useful, but fragile. For noisy commands that should usually be
+            compacted, a Codex hook can block the raw command and tell Codex how to retry with a
+            filtered version.
+          </p>
+        </div>
+
+        <div class="principles">
+          <article class="principle">
+            <h3>Prefer project hooks first</h3>
+            <p>
+              Install command guards per repo before making them global. That keeps experiments from
+              changing unrelated projects.
+            </p>
+          </article>
+          <article class="principle">
+            <h3>Keep instructions concise</h3>
+            <p>
+              Before adding lines to agent instructions, check the existing guidance. A small wording
+              change is often better than another rule.
+            </p>
+          </article>
+          <article class="principle">
+            <h3>Separate global from local</h3>
+            <p>
+              Put common behavior in global instructions. Move git, Cloudflare, deployment, and
+              project-specific details into focused runbooks.
+            </p>
+          </article>
+          <article class="principle">
+            <h3>Keep raw output available</h3>
+            <p>
+              A guard should steer Codex toward compact output, not trap it there. Keep an explicit
+              escape hatch for cases where raw output is genuinely needed.
+            </p>
+          </article>
+        </div>
+      </section>
+
       <section class="section split" id="prompts">
         <div class="section-heading">
           <p class="eyebrow">Copy-ready</p>
@@ -180,6 +224,16 @@
             <button class="copy-button" type="button" data-copy="concise">Copy</button>
             <h3>Concise Patch</h3>
             <pre id="concise">Be concise. Show only the patch summary, the reason, and verification. Do not restate the whole plan unless it changed.</pre>
+          </article>
+          <article class="prompt-card">
+            <button class="copy-button" type="button" data-copy="instruction-hygiene">Copy</button>
+            <h3>Instruction Hygiene</h3>
+            <pre id="instruction-hygiene">When updating agent instructions, first check relevant existing guidance. Prefer a small precise wording change over adding new lines. Move non-global guidance into task runbooks or project-local files.</pre>
+          </article>
+          <article class="prompt-card">
+            <button class="copy-button" type="button" data-copy="runbooks">Copy</button>
+            <h3>Runbook Split</h3>
+            <pre id="runbooks">Keep global AGENTS guidance short. For task-specific workflows, load focused runbooks such as git.md, deploy.md, cloudflare.md, or project-local instructions only when relevant.</pre>
           </article>
         </div>
       </section>

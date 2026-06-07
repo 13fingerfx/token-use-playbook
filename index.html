@@ -158,8 +158,8 @@
           <h2>Use Hooks for Rules Codex Must Not Forget</h2>
           <p>
             Markdown instructions are useful, but fragile. For noisy commands that should usually be
-            compacted, a Codex hook can block the raw command and tell Codex how to retry with a
-            filtered version.
+            compacted, a Codex hook can block raw output and return a useful summary before that
+            output enters the working context.
           </p>
         </div>
 
@@ -186,10 +186,17 @@
             </p>
           </article>
           <article class="principle">
-            <h3>Keep raw output available</h3>
+            <h3>Avoid temp-file detours</h3>
             <p>
-              A guard should steer Codex toward compact output, not trap it there. Keep an explicit
-              escape hatch for cases where raw output is genuinely needed.
+              Do not default to “read the temp file for the rest.” Return counts, top errors, and
+              next suggested filters first so Codex asks a narrower question.
+            </p>
+          </article>
+          <article class="principle">
+            <h3>Keep raw output opt-in</h3>
+            <p>
+              Save raw output for auditability, but require an explicit reason and a targeted range,
+              pattern, or timestamp before Codex reads it.
             </p>
           </article>
         </div>
@@ -234,6 +241,11 @@
             <button class="copy-button" type="button" data-copy="runbooks">Copy</button>
             <h3>Runbook Split</h3>
             <pre id="runbooks">Keep global AGENTS guidance short. For task-specific workflows, load focused runbooks such as git.md, deploy.md, cloudflare.md, or project-local instructions only when relevant.</pre>
+          </article>
+          <article class="prompt-card">
+            <button class="copy-button" type="button" data-copy="hook-summary">Copy</button>
+            <h3>Hook Summary</h3>
+            <pre id="hook-summary">If a hook truncates output, do not immediately read the temp file. First summarize counts, top errors, matching filenames, and suggested narrower filters. Read raw output only by explicit range, timestamp, or pattern.</pre>
           </article>
         </div>
       </section>

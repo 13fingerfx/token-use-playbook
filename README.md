@@ -26,7 +26,19 @@ Before adding to or updating instructions:
 
 Markdown guidance can be ignored or forgotten. For command-output rules that matter, use Codex hooks to steer noisy commands toward compact output before raw output enters the working context.
 
-For example, RTK-style hooks can intercept commands such as `git diff`, `rg`, test runners, and build commands, then ask Codex to retry with a compacted form. Keep a raw-output escape hatch for cases where the full output is genuinely needed.
+For example, RTK-style hooks can intercept commands such as `git diff`, `rg`, test runners, and build commands, then ask Codex to retry with a compacted form.
+
+Do not make “output truncated, read this temp file for the rest” the default hook behavior. That can waste tokens through extra tool calls and broad raw-file reads. Prefer this shape:
+
+- Return counts and totals.
+- Return the top errors or most relevant matches.
+- Return deduplicated examples.
+- Return filenames, timestamps, or line ranges that look useful.
+- Suggest narrower follow-up commands.
+- Save raw output only as an audit artifact.
+- Require an explicit range, timestamp, pattern, or reason before reading raw output.
+
+Raw output should be available, but opt-in.
 
 See: https://github.com/v1kstrand/rtk-codex-hooks
 

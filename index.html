@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Codex Token Use Playbook</title>
+    <meta
+      name="description"
+      content="A practical workflow for cutting Codex token usage by compacting data, limiting output, and preserving focused handoffs."
+    >
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="topbar" aria-label="Page">
+        <a href="#playbook">Playbook</a>
+        <a href="#prompts">Prompts</a>
+        <a href="#calculator">Calculator</a>
+      </nav>
+
+      <section class="hero-inner">
+        <p class="eyebrow">Codex quota workflow</p>
+        <h1>How I cut Codex token use from ~138M/day to ~20M/day</h1>
+        <p class="lede">
+          After the 2x promo ended, the biggest savings came from changing what Codex had to read:
+          compact views, bounded command output, repeatable helper scripts, and small handoff notes.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#playbook">Read the workflow</a>
+          <a class="button secondary" href="#calculator">Estimate savings</a>
+        </div>
+      </section>
+
+      <aside class="usage-panel" aria-label="Token usage reduction">
+        <div class="metric-grid">
+          <div>
+            <span>Before</span>
+            <strong>138M</strong>
+            <small>tokens/day</small>
+          </div>
+          <div>
+            <span>After</span>
+            <strong>20M</strong>
+            <small>tokens/day</small>
+          </div>
+          <div>
+            <span>Reduction</span>
+            <strong>85.5%</strong>
+            <small>less context burn</small>
+          </div>
+        </div>
+        <div class="bar-chart" aria-hidden="true">
+          <div class="bar before"><span>138M</span></div>
+          <div class="bar after"><span>20M</span></div>
+        </div>
+      </aside>
+    </header>
+
+    <main>
+      <section class="intro-band">
+        <div class="intro-copy">
+          <h2>Same work. Less raw haystack.</h2>
+          <p>
+            A lot of waste was not from coding. It came from rereading too much context, swallowing
+            verbose command output, and working with raw data that could have been compacted first.
+          </p>
+        </div>
+        <blockquote>
+          <p>Do not make Codex read raw data if a 50-line summary would answer the question.</p>
+        </blockquote>
+      </section>
+
+      <section class="section" id="playbook">
+        <div class="section-heading">
+          <p class="eyebrow">Eight moves</p>
+          <h2>The Token-Slimming Playbook</h2>
+        </div>
+
+        <div class="steps">
+          <article class="step">
+            <span class="step-number">1</span>
+            <h3>Compact raw data first</h3>
+            <p>
+              Summarize logs, JSON dumps, CSVs, repo scans, and command output before Codex reads
+              them. Keep only relevant fields, samples, top errors, deduped lines, and compact JSON.
+            </p>
+          </article>
+
+          <article class="step">
+            <span class="step-number">2</span>
+            <h3>Limit command output</h3>
+            <p>
+              Use `head`, `tail`, filtered searches, and explicit script limits by default. For big
+              outputs, write to a file and inspect selected ranges.
+            </p>
+          </article>
+
+          <article class="step">
+            <span class="step-number">3</span>
+            <h3>Create helper scripts</h3>
+            <p>
+              Turn repeated inspection into tools like `repo_summary.py`, `compact_logs.py`,
+              `scan_errors.py`, and `list_recent_changes.py`.
+            </p>
+          </article>
+
+          <article class="step">
+            <span class="step-number">4</span>
+            <h3>Maintain a handoff file</h3>
+            <p>
+              Keep current goals, important files, tried commands, known errors, decisions, next
+              steps, and files Codex should avoid rereading.
+            </p>
+          </article>
+
+          <article class="step">
+            <span class="step-number">5</span>
+            <h3>Say what not to read</h3>
+            <p>
+              Exclude `node_modules`, `.venv`, `dist`, `build`, generated files, archives, and any
+              unrelated modules unless they are needed for the task.
+            </p>
+          </article>
+
+          <article class="step">
+            <span class="step-number">6</span>
+            <h3>Prefer targeted snippets</h3>
+            <p>
+              Ask for the OAuth callback function, the failing test diff, or the repo entry point
+              map instead of broad whole-file or whole-repo reads.
+            </p>
+          </article>
+
+          <article class="step">
+            <span class="step-number">7</span>
+            <h3>Compact working context</h3>
+            <p>
+              Periodically ask Codex for a short handoff note with only the facts needed to
+              continue. Remove dead ends and repeated detail.
+            </p>
+          </article>
+
+          <article class="step">
+            <span class="step-number">8</span>
+            <h3>Keep answers concise</h3>
+            <p>
+              Request the patch, the reason, and the test result. Skip repeated plans unless the
+              plan actually changed.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section split" id="prompts">
+        <div class="section-heading">
+          <p class="eyebrow">Copy-ready</p>
+          <h2>Prompts That Reduce Token Burn</h2>
+          <p>
+            These are deliberately direct. They give Codex boundaries before it gets curious.
+          </p>
+        </div>
+
+        <div class="prompt-list">
+          <article class="prompt-card">
+            <button class="copy-button" type="button" data-copy="compact">Copy</button>
+            <h3>Compact First</h3>
+            <pre id="compact">Before reading raw data, create a compact working view with only relevant fields, top errors, deduplicated lines, counts, and samples. Read that summary first.</pre>
+          </article>
+          <article class="prompt-card">
+            <button class="copy-button" type="button" data-copy="boundaries">Copy</button>
+            <h3>Read Boundaries</h3>
+            <pre id="boundaries">Do not scan node_modules, .venv, dist, build, generated files, archives, or unrelated modules. Inspect only files needed for this bug.</pre>
+          </article>
+          <article class="prompt-card">
+            <button class="copy-button" type="button" data-copy="handoff">Copy</button>
+            <h3>Handoff Note</h3>
+            <pre id="handoff">Compact the current findings into a short handoff note. Include current goal, important files, tried commands, known errors, decisions, next steps, and what not to reread.</pre>
+          </article>
+          <article class="prompt-card">
+            <button class="copy-button" type="button" data-copy="concise">Copy</button>
+            <h3>Concise Patch</h3>
+            <pre id="concise">Be concise. Show only the patch summary, the reason, and verification. Do not restate the whole plan unless it changed.</pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="section calculator" id="calculator">
+        <div class="section-heading">
+          <p class="eyebrow">Quick math</p>
+          <h2>Token Savings Calculator</h2>
+        </div>
+        <form class="calc-form">
+          <label>
+            Before tokens per day
+            <input id="beforeTokens" type="number" min="0" step="1" value="138000000">
+          </label>
+          <label>
+            After tokens per day
+            <input id="afterTokens" type="number" min="0" step="1" value="20000000">
+          </label>
+        </form>
+        <div class="calc-results" aria-live="polite">
+          <div>
+            <span>Daily tokens saved</span>
+            <strong id="tokensSaved">118M</strong>
+          </div>
+          <div>
+            <span>Reduction</span>
+            <strong id="percentSaved">85.5%</strong>
+          </div>
+          <div>
+            <span>Monthly savings</span>
+            <strong id="monthlySaved">3.54B</strong>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for tighter Codex sessions: summarize first, inspect less, preserve the useful bits.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
